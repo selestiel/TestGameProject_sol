@@ -4,6 +4,7 @@
 #include "Map.h"
 #include "ECS/Components.h"
 #include "Vector2D.h"
+#include "Collision.h"
 
 
 
@@ -50,11 +51,12 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	player.addComponent<TransformComponent>(2);
 	player.addComponent<SpriteComponent>("assets/player.png");
 	player.addComponent<KeyboardController>();
+	player.addComponent<ColliderComponent>("player");
 
-
-	wall.addComponent<TransformComponent>(300.0, 300.0, 300, 20,1);
-	wall.addComponent<SpriteComponent>("assets/water");
-	SDL_Color white = { 255,255,255,255 };
+	wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20,1);
+	wall.addComponent<SpriteComponent>("assets/water.png");
+	wall.addComponent<ColliderComponent>("wall");
+	//SDL_Color white = { 255,255,255,255 };
 }
 void Game::handleEvents() 
 {
@@ -75,6 +77,10 @@ void Game::update()
 	manager.refresh();
 	manager.update();
 	manager.draw();
+	if (Collision::AABB(player.getComponent<ColliderComponent>().collider, wall.getComponent<ColliderComponent>().collider))
+	{
+		std::cout << "Wall hit" << std::endl;
+	}
 
 };
 void Game::render()
@@ -82,6 +88,7 @@ void Game::render()
 	SDL_RenderClear(renderer);
 
 	map->DrawMap();
+	wall.draw();
 	player.draw();
 
 	SDL_RenderPresent(renderer);
