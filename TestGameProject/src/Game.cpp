@@ -12,11 +12,17 @@ Map* map;
 Manager manager;
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
+SDL_Rect Game::camera{ 0,0,800,640};
+
+
+bool Game::isRunning = false;
 
 std::vector<ColliderComponent*> Game::colliders;
 
 auto& player(manager.addEntity());
 auto& wall(manager.addEntity());
+
+const char* mapfile = "assets/terrain_ss.png";
 
 enum grouplabels : std::size_t
 {
@@ -26,6 +32,10 @@ enum grouplabels : std::size_t
 	groupColliders
 
 };
+
+auto& tiles(manager.getGroup(groupMap));
+auto& players(manager.getGroup(groupPlayers));
+auto& mobs(manager.getGroup(groupMobs));
 
 
 Game::Game()
@@ -59,9 +69,9 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 	map = new Map();
 
-	Map::LoadMap("assets/mymap.map",64,64);
+	Map::LoadMap("assets/map.map",25,20);
 
-	player.addComponent<TransformComponent>(2);
+	player.addComponent<TransformComponent>(4);
 	player.addComponent<SpriteComponent>("assets/player_anims.png",true);
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
@@ -90,18 +100,37 @@ void Game::update()
 
 	manager.refresh();
 	manager.update();
-	manager.draw();
+	
+	camera.x = player.getComponent<TransformComponent>().position.x - (camera.w / 2);
+	camera.y = player.getComponent<TransformComponent>().position.y  - (camera.h / 2);
+	if (camera.x < 0)
+	{
+		camera.x = 0;
+	}
+	if (camera.y < 0)
+	{
+		camera.y = 0;
+	}
+	if (camera.x > camera.w)
+	{
+		camera.x = camera.w;
+	}
+	if (camera.y > camera.h)
+	{
+		camera.y = camera.h;
+	}
+
+	//
 	for (auto& cs : colliders)
 	{
 		Collision::AABB(player.getComponent<ColliderComponent>(), *cs);
 		
 	}
+	//
 
 };
 
-auto& tiles(manager.getGroup(groupMap));
-auto& players(manager.getGroup(groupPlayers));
-auto& mobs(manager.getGroup(groupMobs));
+
 
 
 void Game::render()
@@ -127,9 +156,9 @@ void Game::clean()
 	SDL_Quit();
 }
 
-void Game::AddTile(int id, int x, int y)
+void Game::AddTile(int srcX, int srcY, int xpos, int ypos)
 {
 	auto& tile(manager.addEntity());
-	tile.addComponent<TileComponent>(x,y,32,32,id);
+	tile.addComponent<TileComponent>(srcX, srcY, xpos, ypos, mapfile);
 	tile.addGroup(groupMap);
 }

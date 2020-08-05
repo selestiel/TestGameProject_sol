@@ -22,7 +22,8 @@ public:
 	}
 	TransformComponent(int sc)
 	{
-		position.Zero();
+		position.x = 400;
+		position.y = 320;
 		scale = sc;
 	}
 	TransformComponent(float x, float y)
@@ -43,8 +44,10 @@ public:
 	}
 	void update() override
 	{
-		position.x += velocity.x * speed;
+		position.x += velocity.x * speed; //player position update
 		position.y += velocity.y * speed;
+
+
 	}
 private:
 };
