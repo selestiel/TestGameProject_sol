@@ -30,6 +30,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Collision.cpp" />
+    <ClCompile Include="src\ECS\ECS.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ECS\Components.h">
@@ -66,6 +67,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ECS\TileComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\Animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

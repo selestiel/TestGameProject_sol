@@ -150,6 +150,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Collision.cpp" />
+    <ClCompile Include="src\ECS\ECS.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Map.cpp" />
@@ -158,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Collision.h" />
+    <ClInclude Include="src\ECS\Animation.h" />
     <ClInclude Include="src\ECS\ColliderComponent.h" />
     <ClInclude Include="src\ECS\Components.h" />
     <ClInclude Include="src\ECS\KeyboardController.h" />
