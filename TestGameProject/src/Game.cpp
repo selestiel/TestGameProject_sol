@@ -11,7 +11,6 @@
 
 Map* map;
 Manager manager;
-Stats stats;
 
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
@@ -25,28 +24,10 @@ bool Game::isRunning = false;
 
 auto& player(manager.addEntity());
 auto& label(manager.addEntity());
-auto& monster(manager.addEntity());
 auto& projectile(manager.addEntity());
-std::vector<Entity> MonVec;
 
 
 
-void fillvec(Entity ent)
-{
-	for (int i = 0; i < 10; i++)
-	{
-		MonVec.push_back(ent);
-	}
-}
-/*
-void spawmon()
-{
-	for (int i = 0; i < 10; i++)
-	{
-		MonVec[i];
-	}
-}
-*/
 
 
 
@@ -115,15 +96,9 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 	player.addComponent<SpriteComponent>("player",true);
 	player.addComponent<KeyboardController>();
 	player.addComponent<ColliderComponent>("player");
-	player.addComponent<Stats>(100,100);
 	player.addGroup(groupPlayers);
 
-	monster.addComponent<TransformComponent>(2);
-	monster.addComponent<SpriteComponent>("monster", true);
-	monster.addComponent<ColliderComponent>("monster");
-	monster.addComponent<Stats>(10, 100);
-
-	fillvec(monster);
+	
 	//wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
 	//wall.addComponent<SpriteComponent>("assets/water.png");
 	//wall.addComponent<ColliderComponent>("wall");
@@ -139,7 +114,6 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 }
 auto& tiles(manager.getGroup(Game::groupMap));
 auto& players(manager.getGroup(Game::groupPlayers));
-auto& monsters(manager.getGroup(Game::groupMobs));
 auto& colliders(manager.getGroup(Game::groupColliders));
 auto& projectiles(manager.getGroup(Game::groupProjectiles));
 
@@ -162,11 +136,7 @@ void Game::update()
 
 	SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
 	Vector2D playerPos = player.getComponent<TransformComponent>().position;
-	SDL_Rect monsterCol = monster.getComponent<ColliderComponent>().collider;
-	Vector2D monsterPos = monster.getComponent<TransformComponent>().position;
-	SDL_Rect ProjectileCol = projectile.getComponent<ColliderComponent>().collider;
-	Vector2D ProjectilePos = projectile.getComponent<TransformComponent>().position;
-
+	
 	std::stringstream ss;
 	ss << "Player position: " << playerPos;
 	label.getComponent<UILabel>().SetLabelText(ss.str(), "arial");
@@ -184,7 +154,7 @@ void Game::update()
 		}
 	}
 
-
+	
 	for (auto& p : projectiles)
 	{
 		if (Collision::AABB(player.getComponent<ColliderComponent>().collider, p->getComponent<ColliderComponent>().collider))
@@ -193,6 +163,7 @@ void Game::update()
 			p->destroy();
 		}
 	}
+	
 	
 	camera.x = static_cast<int>(player.getComponent<TransformComponent>().position.x - 400);
 	camera.y = static_cast<int>(player.getComponent<TransformComponent>().position.y - 320);
@@ -216,43 +187,9 @@ void Game::update()
 	/*
 	for (auto& cs : colliders)
 	{
-		Collision::AABB(player.getComponent<ColliderComponent>(), *cs);
+		Collision::AABB(player.getComponent<ColliderComponent*>(), *cs);
 		
-	}
-	*/
-
-	
-	if (monsterPos.x > playerPos.x)
-	{
-		monsterPos.x--;
-	}
-	if (monsterPos.x < playerPos.x)
-	{
-		monsterPos.x++;
-	}
-	if (monsterPos.y > playerPos.y)
-	{
-		monsterPos.y--;
-	}
-	if (monsterPos.y < playerPos.y)
-	{
-		monsterPos.y++;
-	}
-	if (Collision::AABB(monsterCol, playerCol))
-	{
-		player.getComponent<Stats>().health -=1;
-	}
-	if (Collision::AABB(ProjectileCol, monsterCol))
-	{
-		monster.getComponent<Stats>().health -=1;
-		if (monster.getComponent<Stats>().health == 0)
-		{
-			player.getComponent<Stats>().ammo += 5;
-			player.getComponent<Stats>().score += 1;
-
-		}
-	}
-
+	}*/
 };
 
 
@@ -280,12 +217,6 @@ void Game::render()
 	}
 
 	label.draw();
-
-	
-	for (auto& m : monsters)
-	{
-		m->draw();
-	}
 	
 	SDL_RenderPresent(renderer);
 

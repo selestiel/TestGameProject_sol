@@ -164,7 +164,6 @@
     <ClInclude Include="src\ECS\Animation.h" />
     <ClInclude Include="src\ECS\ColliderComponent.h" />
     <ClInclude Include="src\ECS\Components.h" />
-    <ClInclude Include="src\ECS\Stats.h" />
     <ClInclude Include="src\ECS\KeyboardController.h" />
     <ClInclude Include="src\ECS\ProjectileComponent.h" />
     <ClInclude Include="src\ECS\TileComponent.h" />

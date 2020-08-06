@@ -40,7 +40,6 @@ public:
 	{
 		groupMap,
 		groupPlayers,
-		groupMobs,
 		groupColliders,
 		groupProjectiles
 
