@@ -1,7 +1,10 @@
 #pragma once
 
 #include "ECS.h"
-#include "SDL.h"
+#include "../Vector2D.h"
+#include "../Game.h"
+#include "../TextureManager.h"
+
 
 class TileComponent : public Component
 {
@@ -14,20 +17,19 @@ public:
 	TileComponent() = default;
 	
 
-	TileComponent(int srcX, int srcY, int Xpos, int Ypos, const char* path)
+	TileComponent(int srcX, int srcY, int Xpos, int Ypos, int tsize, int tscale, std::string ID)
 	{
-		texture = TextureManager::LoadTexture(path);
-		position.x = Xpos;
-		position.y = Ypos;
+		texture = Game::assets->GetTexture(ID);
 		srcRect.x = srcX;
 		srcRect.y = srcY;
-		srcRect.w = 32;
-		srcRect.h = 32;
+		srcRect.w = tsize;
+		srcRect.h = tsize;
 		
-		dstRect.x = Xpos;
-		dstRect.y = Ypos;
-		dstRect.w = 64;
-		dstRect.h = 64;
+		position.x = static_cast<float>(Xpos);
+		position.y = static_cast<float>(Ypos);
+		
+		dstRect.w = tsize * tscale;
+		dstRect.h = tsize * tscale;
 		
 	}
 
@@ -40,8 +42,8 @@ public:
 
 	void update() override
 	{
-		dstRect.x = position.x - Game::camera.x;
-		dstRect.y = position.y - Game::camera.y;
+		dstRect.x = static_cast<int>(position.x - Game::camera.x);
+		dstRect.y = static_cast<int>(position.y - Game::camera.y);
 	}
 	void draw() override
 	{

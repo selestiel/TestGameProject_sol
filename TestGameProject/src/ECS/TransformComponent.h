@@ -14,6 +14,7 @@ public:
 	int width{ 32 };
 	int scale{ 1 };
 	int speed{ 3 };
+	bool blocked = false;
 	
 	
 	TransformComponent()
@@ -44,8 +45,8 @@ public:
 	}
 	void update() override
 	{
-		position.x += velocity.x * speed; //player position update
-		position.y += velocity.y * speed;
+		position.x += static_cast<int>(velocity.x * speed); //player position update
+		position.y += static_cast<int>(velocity.y * speed);
 
 
 	}

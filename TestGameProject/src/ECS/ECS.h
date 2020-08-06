@@ -5,9 +5,8 @@
 #include <algorithm>
 #include <bitset>
 #include <array>
-#include <type_traits>
 
-struct Component;
+class Component;
 class Entity;
 class Manager;
 
@@ -24,6 +23,7 @@ inline ComponentID getNewComponentTypeID()
 template <typename T> 
 inline  ComponentID getComponentTypeID() noexcept
 {
+	static_assert (std::is_base_of<Component, T>::value, "");
 	static ComponentID typeID{ getNewComponentTypeID() };
 	return typeID;
 }
@@ -35,8 +35,9 @@ using GroupBitSet = std::bitset<maxGroups>;
 
 using ComponentArray = std::array<Component*, maxComponents>;
 
-struct Component 
+class Component 
 {
+public:
 	Entity* entity;
 	virtual void init() {};
 	virtual void update() {};
@@ -47,10 +48,11 @@ struct Component
 class Entity
 {
 private:
-
+	int health;
 	Manager& manager;
 	bool active = true;
 	std::vector<std::unique_ptr<Component>> components;
+
 	ComponentArray componentArray;
 	ComponentBitSet componentBitSet;
 	GroupBitSet groupBitSet;
@@ -81,11 +83,6 @@ public:
 	{
 		active = false;
 	}
-	template <typename T> 
-	bool hasComponent() const
-	{
-		return componentBitSet[getComponentTypeID<T>()];
-	}
 	bool hasGroup(Group mGroup)
 	{
 		return groupBitSet[mGroup];
@@ -95,6 +92,12 @@ public:
 	{
 		groupBitSet[dGroup] = false;
 	}
+	template <typename T> 
+	bool hasComponent() const
+	{
+		return componentBitSet[getComponentTypeID<T>()];
+	}
+	
 
 	template <typename T, typename... TArgs>
 	T& addComponent(TArgs&&... mArgs)

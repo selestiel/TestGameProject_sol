@@ -2,8 +2,8 @@
 
 Vector2D::Vector2D()
 {
-	x = 0.0;
-	y = 0.0;
+	x = 0.0f;
+	y = 0.0f;
 }
 
 Vector2D::Vector2D(float x, float y)
@@ -96,6 +96,7 @@ Vector2D& operator/(Vector2D& vect1, const Vector2D vect2)
 
 std::ostream& operator<<(std::ostream& stream, const Vector2D vect)
 {
-	return stream << "(" << vect.x << " , " << vect.y << ")";
+	stream << "(" << vect.x << " , " << vect.y << ")";
+	return stream;
 	
 }

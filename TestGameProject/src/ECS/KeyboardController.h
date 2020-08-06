@@ -9,6 +9,10 @@ public:
 	TransformComponent* transform;
 	SpriteComponent* sprite;
 
+
+
+
+
 	void init() override
 	{
 		transform = &entity->getComponent<TransformComponent>();

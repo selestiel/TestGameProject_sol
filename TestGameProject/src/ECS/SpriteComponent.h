@@ -4,6 +4,7 @@
 #include "../TextureManager.h"
 #include "Animation.h"
 #include <map>
+#include "../AssetManager.h"
 
 
 class SpriteComponent : public Component
@@ -13,23 +14,26 @@ private:
 	TransformComponent* transform;
 	SDL_Texture* texture;
 	SDL_Rect srcRect, dstRect;
+
 	bool animated{ false };
 	int frames{ 0 };
 	int speed{ 100 };
+
 public:
 
 	int animIndex{ 0 };
+
 	std::map<const char*, Animation> animations;
 
 	SDL_RendererFlip spriteFlip = SDL_FLIP_NONE;
 
 
 	SpriteComponent() = default;
-	SpriteComponent(const char* path) 
+	SpriteComponent(std::string ID) 
 	{
-		setTex(path);
+		setTex(ID);
 	}
-	SpriteComponent(const char* path, bool isAnimated)
+	SpriteComponent(std::string ID, bool isAnimated)
 	{
 		animated = isAnimated;
 
@@ -39,16 +43,15 @@ public:
 		animations.emplace("Idle", idle);
 		animations.emplace("Walk", walk);
 		Play("Idle");
-		setTex(path);
+		setTex(ID);
 	}
 	~SpriteComponent()
 	{
-		SDL_DestroyTexture(texture);
 	}
 
-	void setTex(const char* path) 
+	void setTex(std::string ID) 
 	{
-		texture = TextureManager::LoadTexture(path);
+		texture = Game::assets->GetTexture(ID);
 	}
 	void init() override
 	{

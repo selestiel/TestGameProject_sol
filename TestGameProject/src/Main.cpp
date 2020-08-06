@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "SDL.h"
 
 
 Game* game = nullptr;
@@ -13,7 +12,7 @@ int main(int argc, char* argv[])
 
 
 	game = new Game();
-	game->init("TestGame", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, false);
+	game->init("TestGame", 800, 640, false);
 	while (game->running())
 	{
 		frameStart = SDL_GetTicks();

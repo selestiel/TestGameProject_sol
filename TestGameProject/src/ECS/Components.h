@@ -5,5 +5,9 @@
 #include "KeyboardController.h"
 #include "ColliderComponent.h"
 #include "TileComponent.h"
+#include "ProjectileComponent.h"
+#include "UILabel.h"
+#include "Stats.h"
+
 
 
